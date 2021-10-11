@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-//import '../styles/ToDo.css';
+import '../styles/Joke.css';
 
 class Joke extends Component {
     constructor(props) {
@@ -12,8 +12,17 @@ class Joke extends Component {
 
     render() {
         return (
-            <div>
-                Joke
+            <div className="Joke">
+                <div className="Joke-buttons">
+<i className="fas fa-arrow-up" />
+<br />
+    <span>{this.props.votes}</span>
+    <br />
+    <i className="fas fa-arrow-down" />
+                </div>
+                <div className="Joke-text">  
+{this.props.text}
+                </div>
             </div>
         )
     }

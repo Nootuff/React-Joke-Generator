@@ -1,0 +1,13 @@
+.JokeList{
+    border: 1px solid red;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.JokeList-jokes{
+    border: 1px solid green;
+}
+
+.JokeList-joke{
+    border: 1px solid orange;
+}
