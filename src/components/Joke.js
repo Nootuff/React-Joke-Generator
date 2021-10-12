@@ -30,7 +30,7 @@ class Joke extends Component {
 
     getEmoji() {
         if (this.props.votes >= 15) { //These are all names of emojis from https://emoji-css.afeld.me/, the link to this is imported in the html doc.
-            return "em-rolling_on_the_floor_laughing"
+            return "rolling_on_the_floor_laughing"
         } else if (this.props.votes >= 12) {
             return "laughing"
         } else if (this.props.votes >= 9) {

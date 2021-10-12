@@ -12,12 +12,16 @@ class JokeList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            jokes: []
+            jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]" ) //If there are jokes in the "jokes" item in localStorage, set state to them or else just have an empty array. 
         };
         //this.done = this.done.bind(this);
     }
 
-    async componentDidMount() {
+    async componentDidMount() { //If jokes is empty call the getJokes function somehow. 
+        if (this.state.jokes.length === 0) this.getJokes()
+    }
+
+    async getJokes() {
         let jokesHolder = [];
         while (jokesHolder.length < this.props.numOfJokes) {//This is a while loop because we may have to loop more than 10 times to get 10 UNIQUE jokes. 
             let response = await axios.get("https://icanhazdadjoke.com/", //New API call on each loop of the while.
@@ -26,6 +30,7 @@ class JokeList extends Component {
             jokesHolder.push({ id: uuidv4(),/*uuid is imported above, an npm package to create a random id number*/ jokeText: response.data.joke, votes: 0 }); //Pushes an object into the array with 3 values, "jokeText" set to the data retrieved form the API and "votes" & an id.
         }
         this.setState({ jokes: jokesHolder }); //Send the array to state.
+        window.localStorage.setItem("jokes", JSON.stringify(jokesHolder));
     }
 
     handleVote(id, change) {
@@ -41,7 +46,7 @@ class JokeList extends Component {
                 <h1>Joke List</h1>
                 <div className="JokeList-jokes">
                     {this.state.jokes.map(j => (
-                        <Joke key={j.id} votes={j.votes} text={j.jokeText} upvote={() =>this.handleVote(j.id, 1)} /*this is the upvote, adds in the joke id to find the correct joke, and 1 to */ downvote={() =>this.handleVote(j.id, -1)} /> 
+                        <Joke key={j.id} votes={j.votes} text={j.jokeText} upvote={() => this.handleVote(j.id, 1)} /*this is the upvote, adds in the joke id to find the correct joke, and 1 to */ downvote={() => this.handleVote(j.id, -1)} />
                     ))}
 
                 </div>
