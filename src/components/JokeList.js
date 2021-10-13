@@ -15,6 +15,8 @@ class JokeList extends Component {
             jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]" ), //If there are jokes in the "jokes" item in localStorage, set state to them or else just have an empty array.
             loading: false 
         };
+        this.seenJokes = new Set(this.state.jokes.map(j => j.jokeText));//I have no idea how this works, it's called a "Set" this somehow is a part of preventing duplicate jokes appearing on the page. The map adds the text of the jokes to the set.
+        console.log(this.seenJokes)
         this.handleClick = this.handleClick.bind(this);
     }
 
@@ -31,6 +33,7 @@ class JokeList extends Component {
             jokesHolder.push({ id: uuidv4(),/*uuid is imported above, an npm package to create a random id number*/ jokeText: response.data.joke, votes: 0 }); //Pushes an object into the array with 3 values, "jokeText" set to the data retrieved form the API and "votes" & an id.
         }
         this.setState(oldState => ({
+            loading: false,
             jokes: [...oldState.jokes, ...jokesHolder] //Send the new of jokes array to state and add it to the existing jokes already there. 
             }),
             ()=> window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes)) //This waits until the state is updated then sends the updated state with all the new jokes added to the old to localStorage. 
@@ -46,11 +49,18 @@ class JokeList extends Component {
     }
 
     handleClick(){
-        this.setState({loading: true});
-        this.getJokes();
+        this.setState({loading: true}, this.getJokes); //Sets the loading state to true, and then afterwards, getJokes runs, apparently it doesnt need the activation () in this syntax for some reason.
     }
 
     render() {
+        if(this.state.loading){ /*If the state is loading, display this loading spinner. */
+            return(
+                <div className="loader">
+                    <i className="far fa-8x fa-laugh fa-spin" /> {/*fa-spin makes a fontawesome icon spin. */}
+                    <h1>...Loading</h1>
+                </div>
+            )
+        }
         return (
             <div className="JokeList">
                 <h1>Joke List</h1>

@@ -50,7 +50,7 @@ class Joke extends Component {
         return (
             <div className="Joke">
                 <div className="Joke-text">
-                    {this.props.text} <i class={"Joke-emoji em em-" + this.getEmoji()} ></i> {/*functions the same way as the color system the em things are from the emoji css you imported, the words chosen by getEmoji complete the invocation.*/}
+                    {this.props.text} <i className={"Joke-emoji em em-" + this.getEmoji()} ></i> {/*functions the same way as the color system the em things are from the emoji css you imported, the words chosen by getEmoji complete the invocation.*/}
                 </div>
                 <br />
                 <div className="Joke-buttons">
