@@ -25,12 +25,18 @@ class JokeList extends Component {
     }
 
     async getJokes() {
+        try {
         let jokesHolder = [];
         while (jokesHolder.length < this.props.numOfJokes) {//This is a while loop because we may have to loop more than 10 times to get 10 UNIQUE jokes. 
             let response = await axios.get("https://icanhazdadjoke.com/", //New API call on each loop of the while.
                 { headers: { Accept: "application/json" } }); //This is line is specific to this API? Soemthing to do with how the data is structured in the api? 
-            console.log(response.data.joke)
-            jokesHolder.push({ id: uuidv4(),/*uuid is imported above, an npm package to create a random id number*/ jokeText: response.data.joke, votes: 0 }); //Pushes an object into the array with 3 values, "jokeText" set to the data retrieved form the API and "votes" & an id.
+                let newJoke = response.data.joke; //Holds the data of the joke
+                if(!this.seenJokes.has(newJoke)){ //If the new joke is NOT in the set containing all existing generated jokes, push the joke into the holder array, if the joke is in there it's not added, this prevents duplicate jokes. 
+            console.log(newJoke)
+            jokesHolder.push({ id: uuidv4(),/*uuid is imported above, an npm package to create a random id number*/ jokeText: newJoke, votes: 0 }); //Pushes an object into the array with 3 values, "jokeText" set to the data retrieved form the API and "votes" & an id.
+                } else {
+                    console.log("DUPLICATE DETECTED- " + newJoke);
+                }
         }
         this.setState(oldState => ({
             loading: false,
@@ -38,6 +44,10 @@ class JokeList extends Component {
             }),
             ()=> window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes)) //This waits until the state is updated then sends the updated state with all the new jokes added to the old to localStorage. 
             ); 
+        } catch(error){
+        alert(error)
+        this.setState({loading: false});
+        }
     }
 
     handleVote(id, change) {
