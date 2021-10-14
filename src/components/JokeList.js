@@ -71,12 +71,13 @@ class JokeList extends Component {
                 </div>
             )
         }
+        let jokeSorter = this.state.jokes.sort((first, second) => second.votes - first.votes ) //This sort method is somehow putting all the jokes in order of vote number, highest first in the list. Don't understand how it works but it does, the higher the vote, the higher up the page. They get re-ordered as the votes go in too. 
         return (
             <div className="JokeList">
                 <h1>Joke List</h1>
                 <button onClick={this.handleClick}>Get more jokes</button>
                 <div className="JokeList-jokes">
-                    {this.state.jokes.map(j => (
+                    {jokeSorter.map(j => (
                         <Joke key={j.id} votes={j.votes} text={j.jokeText} upvote={() => this.handleVote(j.id, 1)} /*this is the upvote, adds in the joke id to find the correct joke, and 1 to */ downvote={() => this.handleVote(j.id, -1)} />
                     ))}
 
